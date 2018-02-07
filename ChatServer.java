@@ -11,7 +11,6 @@ import java.net.Socket;
 import java.util.HashSet;
 
 public class ChatServer {
-
   
     private static final int PORT = 9001;
 
@@ -25,35 +24,33 @@ public class ChatServer {
         try {
             while (true) {
                 new Handler(listener.accept()).start();
+                System.out.println("a user is connected!");
             }
         } finally {
             listener.close();
         }
     }
-
-    
+   
     private static class Handler extends Thread {
         private String name;
         private Socket socket;
         private BufferedReader in;
         private PrintWriter out;
-
        
         public Handler(Socket socket) {
             this.socket = socket;
         }
-
-       
+ 
         public void run() {
             try {
-
                 in = new BufferedReader(new InputStreamReader(
                     socket.getInputStream()));
                 out = new PrintWriter(socket.getOutputStream(), true);
 
                 while (true) {
-                    out.println("SUBMITNAME");
+                    out.println("SUBMIT NAME");
                     name = in.readLine();
+//                    System.out.println(name);
                     if (name == null) {
                         return;
                     }
@@ -65,7 +62,7 @@ public class ChatServer {
                     }
                 }
 
-                out.println("NAMEACCEPTED");
+                out.println("NAME ACCEPTED");
                 writers.add(out);
 
                 while (true) {
@@ -74,12 +71,16 @@ public class ChatServer {
                         return;
                     }
                     for (PrintWriter writer : writers) {
-                        writer.println("MESSAGE " + name + ": " + input);
+                        writer.println(name + ": " + input);
                     }
                 }
-            } catch (IOException e) {
+            } 
+            
+            catch (IOException e) {
                 System.out.println(e);
-            } finally {
+            } 
+            
+            finally {
                
               if (name != null) {
                     names.remove(name);
@@ -89,6 +90,7 @@ public class ChatServer {
                 }
                 try {
                     socket.close();
+//                    System.out.println("a user disconnected!");
                 } catch (IOException e) {
                 }
             }

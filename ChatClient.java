@@ -43,7 +43,7 @@ public class ChatClient {
         return JOptionPane.showInputDialog(
             frame,
             "Enter IP Address of the Server:",
-            "Welcome to the Chatter",
+            "Welcome",
             JOptionPane.QUESTION_MESSAGE);
     }
 
@@ -63,15 +63,26 @@ public class ChatClient {
             socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
 
+        try
+        {
         while (true) {
             String line = in.readLine();
-            if (line.startsWith("SUBMITNAME")) {
+            if (line.startsWith("SUBMIT NAME")) {
                 out.println(getName());
-            } else if (line.startsWith("NAMEACCEPTED")) {
+            } else if (line.startsWith("NAMEA CCEPTED")) {
                 textField.setEditable(true);
             } else if (line.startsWith("MESSAGE")) {
                 messageArea.append(line.substring(8) + "\n");
             }
+        }  
+        }
+        catch (Exception e)
+        {
+          e.getMessage();
+        }
+        finally
+        {
+          System.out.println("User exit!! ");
         }
     }
 
